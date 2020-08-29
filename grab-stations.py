@@ -68,7 +68,7 @@ while x <= (len(name)-1): # Instead of using the integer 51 for the 51 stations,
     # Increment x to perform same operation on every station's lat and long
     x=x+1
 
-# Write data to stations.txt file
+# Send data to standard output or stdout to write into stations.txt file
 x=0
 while x <= (len(name)-1): # Instead of using the integer 51 for the 51 stations, this is adaptable to any amount of stations
     # The print function or sys.stdout.write may be used to send this information to standard output
