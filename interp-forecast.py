@@ -20,10 +20,12 @@ for line in sys.stdin:
     temp.append(float(elems[3]))
 
 for (i, stn) in enumerate(stns):
-    print("%s\t%+6.2f\t%+6.2f\t%+3.0f"%(stn, locx[i], locy[i], temp[i]))
-
+    #print("%s\t%+6.2f\t%+6.2f\t%+3.0f"%(stn, locx[i], locy[i], temp[i]))
+    # Amrutha commented out the printing of the entire list because it was visually distracting 8.18.20
+    
 # Parse command-line arguments for latitude and longitude.
-import getopt,sys
+# Amrutha had to indent 'import getopt,sys' because it's only for the for-loop 8.18.20
+    import getopt,sys
 options, args = getopt.getopt(sys.argv[1:], '', ['lat=', 'lon='])
 for option, value in options:
     if option in ('--lat'):
