@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[55]:
+# In[1]:
 
 
 # grab-forecast.py copies temperature data for all the weather stations in Illinois using input from stations.txt
@@ -41,24 +41,24 @@ c=len(name)-1 # c is the highest index number of the station name/lat/long array
 
 a=0
 # Find the temperature data for each weather station
-while a <= c:
-    x=r.text.find(name[a]) # Find index number of first char of station name within 'r.text' array
-    t=r.text.find('TMP',x,tlength) # Find index num of first char of the first 'TMP' string found after station name 
-    temp.append(r.text[t+5:t+8]) # Once t is known, counts upwards to grab most current temp
-    a=a+1 # Increments up for next station
-    
-# Check for missing temperature data and delete station info if temperature is missing
-a=0
-while a <= c: # While a is <= the highest index number of the name/lat/long arrays
-    if (temp[a] == '   '):
-        del name[a]
-        del long[a]
-        del lat[a]
-        del temp[a]
-        c=c-1
-    a=a+1
-    
-# Write data to forecast.txt file
+while a <= (len(name)-1): # While a is <= highest index num of 'name' array
+    if a == len(name): # Check if a is a num outside of index range since length of 'name' can change
+        break
+    else :
+        x=r.text.find(name[a]) # Find index number of first char of station name within 'r.text' array
+        t=r.text.find('TMP',x,tlength) # Find index num of first char of the first 'TMP' string found after station name 
+        found_temp=r.text[t+5:t+8] # Once t is known, counts upwards to grab most current temp
+        
+        if (found_temp == '   '): # If temp is an empty string, remove all station records            
+            del name[a]
+            del long[a]
+            del lat[a]            
+            a=a # Following station name has a new index number of a
+        else : # If found temp is any other string, append to 'temp' array  
+            temp.append(found_temp)  
+            a=a+1 # Increment upwards to next station name    
+        
+# Send data to output to write into forecast.txt file
 a=0
 while a <= (len(name)-1):
     # The print function or sys.stdout.write may be used to send this information to standard output
