@@ -1,45 +1,48 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[6]:
+# In[7]:
 
 
-# Extract a list of weather stations and their coordinates for Illinois from nws.noaa.gov
-# Program written by Maura and Amrutha and Emilio
+# grab-stations.py extracts a list of weather stations and their coordinates for Illinois from nws.noaa.gov
+# and outputs it to a file named stations.txt
+# Program written by Amrutha and Maura
 
+# Import library that allows DOM navigation
 from lxml import html
+# Import requests and sys libraries
 import requests
-# Import library sys
 import sys
 
 page = requests.get('https://www.nws.noaa.gov/mdl/gfslamp/docs/stations_info.shtml')
 extractedHTML = html.fromstring(page.content)
 
-
+# Pull context exclusively from html tag indicated
 ilStations = extractedHTML.xpath('/html/body/table[4]/tr/td[3]/table[2]/tr[48]/td')
 stationData = ilStations[0].text_content()
-# Eliminate all print statements because they all get stored in sys.stdout which we don't want
-#print (stationData)
+
 
 # The following creates lists containing the name of the weather stations, and their coordinates
 name=[]
 lat=[]
 long=[]
-# Stands for total length
+
+# Stands for total length of the stationData text
 tlength=len(stationData)
-# Eliminate all print statements because they all get stored in sys.stdout which we don't want
-#print (tlength)
+
+# These are the index numbers for the first station's name (72-76), latitude (103-108), and longitude (113-118)
 a=72
 b=76
-c=103 # USED TO BE 102
+c=103
 d=108
 e=113
 f=118
 
 
-# Notice originally that a string with empty spaces used to be appended to the end of of the name, lat, and long arrays
+# Originally, a string with empty spaces used to be appended to the end of of the name, lat, and long arrays
 # This new condition gets rid of the empty string at the end of the arrays
-# As long as the station name doesn't return 4 blank spaces, this while loop will run
+# As long as the station name doesn't return 4 blank spaces, this while loop will run and append each name, lat, and long
+# to their respective arrays
 while stationData[a:b] != '    ': 
     name.append(stationData[a:b])
     lat.append(stationData[c:d])
@@ -58,40 +61,20 @@ while stationData[a:b] != '    ':
 
 # Add + / - to coordinates
 x=0
-while x <= (len(name)-1): # Instead of using the integer 51, this version is fool-proof against new stations added to list
-    # Increment x up by 1 before performing operations again
+while x <= (len(name)-1): # Instead of using the integer 51 for the 51 stations, this is adaptable to any amount of stations
+    # Add the + and - to the lat and long strings
     lat[x]='+'+ lat[x]
-    #lat[x]=lat[x].replace(' ','') This line of code is not needed
     long[x]='-'+ long[x]
-    # Eliminate all prints statement because they all get stored in sys.stdout which we don't want
-    #print(name[x],' ',long[x],' ',lat[x])
+    # Increment x to perform same operation on every station's lat and long
     x=x+1
 
 # Write data to stations.txt file
-
 x=0
-#file=open('stations.txt','w+')
-#for line in sys.stdout:
-while x <= (len(name)-1): # Instead of using the integer 51, this version is fool-proof against new stations added to list
-    sys.stdout.write(name[x])
-    sys.stdout.write(' ')
-    sys.stdout.write(long[x])
-    sys.stdout.write(' ')
-    sys.stdout.write(lat[x])
-    sys.stdout.write('\n')
-        
-    #file.write(name[x])
-    #file.write(' ')
-    #file.write(long[x])
-    #file.write(' ')
-    #file.write(lat[x])
-    #file.write('\n')
+while x <= (len(name)-1): # Instead of using the integer 51 for the 51 stations, this is adaptable to any amount of stations
+    # The print function or sys.stdout.write may be used to send this information to standard output
+    # which will then be stored in the stations.txt file through the command-line in Git-Bash
+    print(name[x],long[x],lat[x])
     x=x+1
-#file.close()
-
-# Eliminate all prints statement because they all get stored in sys.stdout which we don't want
-#print(' ')
-#print('The stations.txt file has been created for the state of Illinois from nws.noaa.gov')
 
 
 # In[ ]:
