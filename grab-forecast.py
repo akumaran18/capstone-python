@@ -1,65 +1,56 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[8]:
+# In[55]:
 
 
-# The purpose of this program is to copy temperature data for all the weather stations in Illinois
-# into a file from the NOAA website
-# Program written by Maura and Amrutha and Emilio
+# grab-forecast.py copies temperature data for all the weather stations in Illinois using input from stations.txt
+# and outputs the temperature data to a file called forecast.txt
+# Program written by Amrutha and Maura
 
-#import data from website
+# Import the requests and sys libraries
 import requests
-# Import library sys
 import sys
 
+# Use requests to pull the text content from a text file on the remote website
 r=requests.get('http://nws.noaa.gov/mdl/gfslamp/bull/lavlamp.txt')
-# print(r.text)
 
-# Declare / assign variables
+# Declare/assign variables
 name=[]
 lat=[]
 long=[]
 temp=[]
-a=0
-c=0
-x=0
+
+# Stands for total length of the text found in lavlamp.txt on the NOAA site
 tlength=len(r.text)
 
-# Eliminate all print statements because they all get stored in sys.stdout which we don't want
-#print('c before the for loop:', c)
+# grab-forecast.py will run with stations.txt as input in Git-Bash. Each line of input will be split up by white space as 
+# indexed elements in an array named 'elems.' The for-loop appends each element to the right array before moving to the
+# next line of input
 
-# Open stations.txt and read data into variables
-#file=open('stations.txt','r')
-for line in sys.stdin:
+file=open('stations.txt','r')
+#for line in sys.stdin:
+for line in file:
     elems = line.split()
-    name.append(elems[0]) #station name
-    long.append(elems[1])
-    lat.append(elems[2])
-    #c=c+1
-#file.close()
+    name.append(elems[0]) # appended to station name array
+    long.append(elems[1]) # appended to station long array
+    lat.append(elems[2]) # appended to station lat array
+file.close()
 
-# Eliminate all print statements because they all get stored in sys.stdout which we don't want
-#print('Length of name array:', len(name))
+c=len(name)-1 # c is the highest index number of the station name/lat/long arrays
 
-#c=c-1
-
-c=len(name)-1
-
+a=0
 # Find the temperature data for each weather station
 while a <= c:
-    x=r.text.find(name[a])
-    t=r.text.find('TMP',x,tlength) 
-    temp.append(r.text[t+5:t+8])
-    # Eliminate all print statement because they all get stored in sys.stdout which we don't wan
-    #print(name[a], ' ',long[a],' ',lat[a], ' ',temp[a])
-    a=a+1
-
+    x=r.text.find(name[a]) # Find index number of first char of station name within 'r.text' array
+    t=r.text.find('TMP',x,tlength) # Find index num of first char of the first 'TMP' string found after station name 
+    temp.append(r.text[t+5:t+8]) # Once t is known, counts upwards to grab most current temp
+    a=a+1 # Increments up for next station
+    
 # Check for missing temperature data and delete station info if temperature is missing
 a=0
-while a <= c:
+while a <= c: # While a is <= the highest index number of the name/lat/long arrays
     if (temp[a] == '   '):
-#        print ('Its a GREAT day!')
         del name[a]
         del long[a]
         del lat[a]
@@ -67,35 +58,13 @@ while a <= c:
         c=c-1
     a=a+1
     
-# Create the forecast.txt file
-x=0
-#file=open('forecast.txt','w+')
-while x <= c:
-    sys.stdout.write(name[x])
-    sys.stdout.write(' ')
-    sys.stdout.write(long[x])
-    sys.stdout.write(' ')
-    sys.stdout.write(lat[x])
-    sys.stdout.write(' ')
-    sys.stdout.write(temp[x])
-    sys.stdout.write('\n')
-    
-    #file.write(name[x])
-    #file.write(' ')
-    #file.write(long[x])
-    #file.write(' ')
-    #file.write(lat[x])
-    #file.write(' ')
-    #file.write(temp[x])
-    #file.write('\n')
-    x=x+1
-#file.close()
-
-# Eliminate all print statements because they all get stored in sys.stdout which we don't want
-#print(' ')
-#print('The forecast.txt file has been created for the state of Illinois from nws.noaa.gov')
-
-#print('END')
+# Write data to forecast.txt file
+a=0
+while a <= (len(name)-1):
+    # The print function or sys.stdout.write may be used to send this information to standard output
+    # which will then be stored in the forecast.txt file through the command-line in Git-Bash
+    print(name[a],long[a],lat[a],temp[a])
+    a=a+1
 
 
 # In[ ]:
