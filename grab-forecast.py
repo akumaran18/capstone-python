@@ -58,7 +58,7 @@ while a <= (len(name)-1): # While a is <= highest index num of 'name' array
             temp.append(found_temp)  
             a=a+1 # Increment upwards to next station name    
         
-# Send data to output to write into forecast.txt file
+# Send data to standard output or stdout to write into forecast.txt file
 a=0
 while a <= (len(name)-1):
     # The print function or sys.stdout.write may be used to send this information to standard output
